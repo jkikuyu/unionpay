@@ -144,17 +144,7 @@ public class SDKUtil {
 			// Set the value of the signed domain
 			data.put(SDKConstants.param_signature, strAfterSha256);
 			return true;
-		} else if (SIGNMETHOD_SM3.equals(signMethod)) {
-			String stringData = coverMap2String(data);
-			LogUtil.writeLog("Request message string to be signed:[" + stringData + "]");
-			String strBeforeSM3 = stringData
-					+ SDKConstants.AMPERSAND
-					+ SecureUtil.sm3X16Str(secureKey, encoding);
-			String strAfterSM3 = SecureUtil.sm3X16Str(strBeforeSM3, encoding);
-			// Set the value of the signed domain
-			data.put(SDKConstants.param_signature, strAfterSM3);
-			return true;
-		}
+		} 
 		return false;
 	}
 
@@ -271,20 +261,7 @@ public class SDKUtil {
 			String strAfterSha256 = SecureUtil.sha256X16Str(strBeforeSha256,
 					encoding);
 			return stringSign.equals(strAfterSha256);
-		} else if (SIGNMETHOD_SM3.equals(signMethod)) {
-			// 1. Conduct SM3 authentication
-			String stringSign = resData.get(SDKConstants.param_signature);
-			LogUtil.writeLog("Original text of the signature:["+stringSign+"]");
-			// Convert Map information into the string “key1=value1&key2=value2”.
-			String stringData = coverMap2String(resData);
-			LogUtil.writeLog("Message strings to be signature-authenticated and returned:["+stringData+"]");
-			String strBeforeSM3 = stringData
-					+ SDKConstants.AMPERSAND
-					+ SecureUtil.sm3X16Str(secureKey, encoding);
-			String strAfterSM3 = SecureUtil
-					.sm3X16Str(strBeforeSM3, encoding);
-			return stringSign.equals(strAfterSM3);
-		}
+		} 
 		return false;
 	}
 	
@@ -378,23 +355,7 @@ public class SDKUtil {
 			boolean result =  stringSign.equals(strAfterSha256);
 			LogUtil.writeLog("Signature authentication" + (result? "Succeed":"Fail"));
 			return result;
-		} else if (SIGNMETHOD_SM3.equals(signMethod)) {
-			// 1. Conduct SM3 authentication
-			String stringSign = resData.get(SDKConstants.param_signature);
-			LogUtil.writeLog("Original text of the signature:["+stringSign+"]");
-			// Convert Map information into the string “key1=value1&key2=value2”.
-			String stringData = coverMap2String(resData);
-			LogUtil.writeLog("Message strings to be signature-authenticated and returned:["+stringData+"]");
-			String strBeforeSM3 = stringData
-					+ SDKConstants.AMPERSAND
-					+ SecureUtil.sm3X16Str(SDKConfig.getConfig()
-							.getSecureKey(), encoding);
-			String strAfterSM3 = SecureUtil
-					.sm3X16Str(strBeforeSM3, encoding);
-			boolean result =  stringSign.equals(strAfterSM3);
-			LogUtil.writeLog("Signature authentication" + (result? "Succeed":"Fail"));
-			return result;
-		}
+		} 
 		return false;
 	}
 

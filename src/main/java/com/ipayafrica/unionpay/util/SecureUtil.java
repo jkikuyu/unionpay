@@ -51,28 +51,6 @@ public class SecureUtil {
 	 */
 	private static final String BC_PROV_ALGORITHM_SHA256RSA = "SHA256withRSA";
 
-	/**
-	 * Conduct a hexadecimal conversion after sm3 calculation
-	 * 
-	 * @param data
-	 *            Data to be calculated
-	 * @param encoding
-	 *            Encoding
-	 * @return Calculation result
-	 */
-	public static String sm3X16Str(String data, String encoding) {
-		byte[] bytes = sm3(data, encoding);
-		StringBuilder sm3StrBuff = new StringBuilder();
-		for (int i = 0; i < bytes.length; i++) {
-			if (Integer.toHexString(0xFF & bytes[i]).length() == 1) {
-				sm3StrBuff.append("0").append(
-						Integer.toHexString(0xFF & bytes[i]));
-			} else {
-				sm3StrBuff.append(Integer.toHexString(0xFF & bytes[i]));
-			}
-		}
-		return sm3StrBuff.toString();
-	}
 
 	/**
 	 * Conduct a hexadecimal conversion after sha1 calculation
@@ -201,14 +179,7 @@ public class SecureUtil {
 	 *            Data to be calculated
 	 * @return Calculation result
 	 */
-	private static byte[] sm3(byte[] data) {
-		SM3Digest sm3 = new SM3Digest();
-		sm3.update(data, 0, data.length);
-		byte[] result = new byte[sm3.getDigestSize()];
-		sm3.doFinal(result, 0);
-		return result;
-	}
-	
+
 	/**
 	 * SHA1 calculation
 	 * 
@@ -241,24 +212,6 @@ public class SecureUtil {
 			return sha256(datas.getBytes(encoding));
 		} catch (UnsupportedEncodingException e) {
 			LogUtil.writeErrorLog("SHA256 calculation fails", e);
-			return null;
-		}
-	}
-
-	/**
-	 * SM3 calculation
-	 * 
-	 * @param datas
-	 *            Data to be calculated
-	 * @param encoding
-	 *            Character set code
-	 * @return
-	 */
-	private static byte[] sm3(String datas, String encoding) {
-		try {
-			return sm3(datas.getBytes(encoding));
-		} catch (UnsupportedEncodingException e) {
-			LogUtil.writeErrorLog("SM3 calculation fails", e);
 			return null;
 		}
 	}
